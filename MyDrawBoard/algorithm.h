@@ -33,6 +33,8 @@ namespace ComputerGraphics {
     };
     class Algorithm {
     public:
+
+
         static vector<Point> BresenhamLining(Point start, Point end) {
             vector<Point> result{};
             auto x1 = start.x, x2 = end.x, y1 = start.y, y2 = end.y;
@@ -297,7 +299,7 @@ namespace ComputerGraphics {
                     int p = i;
                     if (p >= 8)
                         p-=8;
-                    vector<Point> temp2 = CircleArcCompletRange(temp, i);
+                    vector<Point> temp2 = CircleArcCompletRange(temp, p);
                     result.insert(result.end(), temp2.begin(), temp2.end());
                 }
             }
@@ -472,15 +474,10 @@ namespace ComputerGraphics {
            //根据第一区间内的圆弧，将其转换为其他区间的圆弧
            static vector<Point> CircleArcCompletRange(const vector<Point> & firPoints,const int & id) {
                vector<Point> result{};
-               for (int i = 0; i < firPoints.size(); i++) {
-                   result.push_back(firPoints[i]);
-               }
+               result = firPoints;
                switch (id)
                {
                case 0:
-                   for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(result[i].x, result[i].y);
-                   }
                    break;
                case 1:
                    for (int i = 0; i < result.size(); i++) {
@@ -489,27 +486,27 @@ namespace ComputerGraphics {
                    break;
                case 2:
                    for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(result[i].y, -result[i].x);
+                       result[i] = Point(result[i].y, -1 * result[i].x);
                    }
                    break;
                case 3:
                    for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(result[i].x, -result[i].y);
+                       result[i] = Point(result[i].x, -1 * result[i].y);
                    }
                    break;
                case 4:
                    for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(-result[i].x, -result[i].y);
+                       result[i] = Point(-1 * result[i].x, -1 * result[i].y);
                    }
                    break;
                case 5:
                    for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(-result[i].y, -result[i].x);
+                       result[i] = Point(-1*result[i].y, -1 * result[i].x);
                    }
                    break;
                case 6:
                    for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(-result[i].y, result[i].x);
+                       result[i] = Point(-1 * result[i].y, result[i].x);
                    }
                    break;
                case 7:
@@ -518,7 +515,7 @@ namespace ComputerGraphics {
                    }
                    break;
                default:
-                   throw "Out of Range !!";
+                   throw 1;
                    break;
                }
                return result;
@@ -610,5 +607,8 @@ namespace ComputerGraphics {
 
                return result;
            }
+
+
     };
+
 }
