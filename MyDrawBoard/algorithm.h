@@ -160,7 +160,7 @@ namespace ComputerGraphics {
             }
             return result;
         }
-        //
+        
         static vector<Point> DDALine(const Point & start, const Point& end)
         {
             vector<Point> result;
