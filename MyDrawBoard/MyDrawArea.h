@@ -39,6 +39,10 @@ namespace ComputerGraphics {
 			return m_currentShapeType;
 		}
 
+		void SetBoarder(int left, int right, int bottom, int top) {
+			m_boarder.Set(left, right, bottom, top);
+		}
+
 		/*void DrawShapes(const std::vector<Point> & points, QPainter painter) {
 			for (int i = 0; i < points.size(); i++) {
 				painter.drawPoint(QPoint(points[i].x, points[i].y));
@@ -48,7 +52,7 @@ namespace ComputerGraphics {
 		void paintEvent(QPaintEvent* event) override {
 			QFrame::paintEvent(event);
 			QPainter painter(this);
-			m_pen.setColor(Qt::green);
+			m_pen.setColor(Qt::red);
 			m_pen.setWidth(1);
 
 			painter.setPen(m_pen);
@@ -58,6 +62,7 @@ namespace ComputerGraphics {
 				painter.drawPoint(QPoint(points[i].x, points[i].y));
 			}
 		}
+
 		void resizeEvent(QResizeEvent* event) override {
 			QFrame::resizeEvent(event);
 		}
@@ -65,7 +70,7 @@ namespace ComputerGraphics {
 		void mousePressEvent(QMouseEvent* event) override {
 			if (event->button() == Qt::MouseButton::LeftButton) {
 				InputSystem::getInstance()->MousePress(Point(event->pos().x(), event->pos().y())
-					, m_currentShapeType);
+					, m_currentShapeType, m_boarder);
 			}
 
 			QFrame::mousePressEvent(event);
@@ -94,6 +99,7 @@ namespace ComputerGraphics {
 		int m_width;
 		int m_height;
 
+		Boarder m_boarder;
 		ShapeType m_currentShapeType;
 		QPen m_pen;
 	};

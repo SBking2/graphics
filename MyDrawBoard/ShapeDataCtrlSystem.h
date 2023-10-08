@@ -3,6 +3,8 @@
 #include"BresenhamLineData.h"
 #include"MidPointCircleData.h"
 #include"CircleArcData.h"
+#include"CSCLineData.h"
+#include"MidCLineData.h"
 namespace ComputerGraphics {
 	class ShapeDataNode {
 	public:

@@ -5,6 +5,7 @@
 #include <math.h>
 using namespace std;
 namespace ComputerGraphics {
+    //点变量
     struct Point {
         int x;
         int y;
@@ -29,6 +30,35 @@ namespace ComputerGraphics {
         void Set(int X, int Y) {
             x = X;
             y = Y;
+        }
+    };
+    //边框变量
+    struct Boarder {
+        int left;
+        int right;
+        int bottom;
+        int top;
+        Boarder(int left = 0, int right = 100, int bottom = 0, int top = 100) {
+            this->left = left;
+            this->right = right;
+            this->bottom = bottom;
+            this->top = top;
+        }
+        ~Boarder() {
+
+        }
+        Boarder& operator=(const Boarder& boarder) {
+            left = boarder.left;
+            right = boarder.right;
+            bottom = boarder.bottom;
+            top = boarder.top;
+            return *this;
+        }
+        void Set(int left, int right, int bottom, int top) {
+            this->left = left;
+            this->right = right;
+            this->bottom = bottom;
+            this->top = top;
         }
     };
     class Algorithm {
@@ -316,8 +346,127 @@ namespace ComputerGraphics {
             }
             return result;
         }
+        
+        //Cohen-Sutherland算法裁剪直线
+        static vector<Point> CSClipping(Point start, Point end, Boarder boarder) {
+            constexpr int LEFT = 1 << 0;
+            constexpr int RIGHT = 1 << 1;
+            constexpr int BOTTOM = 1 << 2;
+            constexpr int TOP = 1 << 3;
+            auto encode = [=](Point p) {
+                int c{ 0 };
+                if (p.x < boarder.left)
+                    c |= LEFT;
+                if (p.x > boarder.right)
+                    c |= RIGHT;
+                if (p.y < boarder.bottom)
+                    c |= BOTTOM;
+                if (p.y > boarder.top)
+                    c |= TOP;
+                return c;
+            };
+            auto code_start = encode(start);
+            auto code_end = encode(end);
+            if ((code_start | code_end) == 0)
+                return BresenhamLining(start, end);
+            if ((code_start & code_end) != 0)
+                return {};
+            while (code_start != 0 || code_end != 0) {
+                int x{}, y{};
+                auto code = code_start;
+                if (code_start == 0)
+                    code = code_end;
+                if ((LEFT & code) != 0) {
+                    x = boarder.left;
+                    y = start.y + (float)(end.y - start.y) * (float)(boarder.left - start.x) /
+                        (float)(end.x - start.x);
+                }
+                else if ((RIGHT & code) != 0) {
+                    x = boarder.right;
+                    y = start.y + (float)(end.y - start.y) *
+                        (float)(boarder.right - start.x) /
+                        (float)(end.x - start.x);
+                }
+                else if ((BOTTOM & code) != 0) {
+                    y = boarder.bottom;
+                    x = start.x + (float)(end.x - start.x) *
+                        (float)(boarder.bottom - start.y) /
+                        (float)(end.y - start.y);
+                }
+                else if ((TOP & code) != 0) {
+                    y = boarder.top;
+                    x = start.x + (float)(end.x - start.x) * (float)(boarder.top - start.y) /
+                        (float)(end.y - start.y);
+                }
+                else {
+                    end.x = x;
+                    end.y = y;
+                    code_end = encode({ x, y });
+                }
+            }
+            return BresenhamLining(start, end);
+        }
+        
+        //中点分割裁剪算法
+        static vector<Point> MidPointClipping(Point start, Point end, Boarder boarder) {
+            constexpr int LEFT = 1 << 0;
+            constexpr int RIGHT = 1 << 1;
+            constexpr int BOTTOM = 1 << 2;
+            constexpr int TOP = 1 << 3;
+            auto encode = [=](Point p) {
+                int c{ 0 };
+                if (p.x < boarder.left)
+                    c |= LEFT;
+                if (p.x > boarder.right)
+                    c |= RIGHT;
+                if (p.y < boarder.bottom)
+                    c |= BOTTOM;
+                if (p.y > boarder.top)
+                    c |= TOP;
+                return c;
+            };
+            auto code_start = encode(start);
+            auto code_end = encode(end);
+            if ((code_start | code_end) == 0)
+                return BresenhamLining(start, end);
+            if ((code_start & code_end) != 0)
+                return {};
+            auto midp = [](Point p1, Point p2) -> Point {
+                return { (p1.x + p2.x) / 2, (p1.y + p2.y) / 2 };
+            };
+            if (code_end != 0) {
 
-        private:
+                auto p11 = start;
+                auto p22 = end;
+                auto pmid = midp(p11, p22);
+                while (std::abs(p11.x - pmid.x) > 1 || std::abs(p11.y - pmid.y) > 1) {
+                    auto cmid = encode(pmid);
+                    if (cmid == 0)
+                        p11 = pmid;
+                    else
+                        p22 = pmid;
+                    pmid = midp(p11, p22);
+                }
+                end = pmid;
+            }
+            if (code_start != 0) {
+                auto p11 = start;
+                auto p22 = end;
+                auto pmid = midp(p11, p22);
+                while (std::abs(p11.x - pmid.x) > 1 || std::abs(p11.y - pmid.y) > 1) {
+                    auto cmid = encode(pmid);
+                    if (cmid == 0)
+                        p22 = pmid;
+                    else
+                        p11 = pmid;
+                    pmid = midp(p11, p22);
+                }
+                start = pmid;
+            }
+            return BresenhamLining(start, end);
+        }
+        
+    private:
             //绘制第一区间的完整圆弧
            static vector<Point> CircleArc1stRange(const int& radius) {
                vector<Point> result{};

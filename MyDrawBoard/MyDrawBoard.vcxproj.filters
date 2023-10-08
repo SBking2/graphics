@@ -78,5 +78,11 @@
     <ClInclude Include="CircleArcData.h">
       <Filter>Header Files\ShapeDataSon</Filter>
     </ClInclude>
+    <ClInclude Include="CSCLineData.h">
+      <Filter>Header Files\ShapeDataSon</Filter>
+    </ClInclude>
+    <ClInclude Include="MidCLineData.h">
+      <Filter>Header Files\ShapeDataSon</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

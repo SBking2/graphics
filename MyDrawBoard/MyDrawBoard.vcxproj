@@ -31,12 +31,12 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>6.3.2_msvc2019_64</QtInstall>
+    <QtInstall>5.15.2_msvc2019_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>6.3.2_msvc2019_64</QtInstall>
+    <QtInstall>5.15.2_msvc2019_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -101,7 +101,9 @@
     <ClInclude Include="algorithm.h" />
     <ClInclude Include="BresenhamLineData.h" />
     <ClInclude Include="CircleArcData.h" />
+    <ClInclude Include="CSCLineData.h" />
     <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="MidCLineData.h" />
     <ClInclude Include="MidPointCircleData.h" />
     <ClInclude Include="MidPointLineData.h" />
     <ClInclude Include="MyButton.h" />

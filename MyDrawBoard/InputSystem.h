@@ -10,7 +10,7 @@ namespace ComputerGraphics {
 			return m_instance;
 		}
 		~InputSystem() {}
-		void MousePress(const Point& start, const ShapeType& currentShape) {
+		void MousePress(const Point& start, const ShapeType& currentShape, const Boarder & boarder) {
 			switch (currentShape)
 			{
 			case ShapeType::MidPointLine:
@@ -55,6 +55,24 @@ namespace ComputerGraphics {
 				ShapeDataCtrlSystem::getInstance()->AddShapeData(newCircle);
 				m_OnPressed = start;
 				m_isSetCenter = true;
+			}
+			break;
+			case ShapeType::CSCLine:
+			{
+				m_MLisPressed = true;
+				CSCLineData* newLine = new CSCLineData(start, start, boarder);
+				m_currentShape = newLine;
+				ShapeDataCtrlSystem::getInstance()->AddShapeData(newLine);
+				m_OnPressed = start;
+			}
+				break;
+			case ShapeType::MidCLine:
+			{
+				m_MLisPressed = true;
+				MidCLineData* newLine = new MidCLineData(start, start, boarder);
+				m_currentShape = newLine;
+				ShapeDataCtrlSystem::getInstance()->AddShapeData(newLine);
+				m_OnPressed = start;
 			}
 			break;
 			case ShapeType::Unknown:

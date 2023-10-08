@@ -7,7 +7,9 @@ namespace ComputerGraphics {
 		BresenhamLine,
 		MidPointLine,
 		MidPointCircle,
-		CircleArc
+		CircleArc,
+		CSCLine,
+		MidCLine
 	};
 	class ShapeData {
 	public:
