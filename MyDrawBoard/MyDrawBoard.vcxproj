@@ -62,11 +62,17 @@
     <ClCompile>
       <ConformanceMode>Default</ConformanceMode>
     </ClCompile>
+    <Link>
+      <StackReserveSize>260046848</StackReserveSize>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <ConformanceMode>Default</ConformanceMode>
     </ClCompile>
+    <Link>
+      <StackReserveSize>260046848</StackReserveSize>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -110,6 +116,7 @@
     <ClInclude Include="MyDrawArea.h" />
     <ClInclude Include="MyDrawBoardWidget.h" />
     <ClInclude Include="MyUIList.h" />
+    <ClInclude Include="SeedFillData.h" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeDataCtrlSystem.h" />
     <ClInclude Include="StyleHelper.h" />

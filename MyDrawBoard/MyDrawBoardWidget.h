@@ -4,6 +4,8 @@
 #include <QKeyEvent>
 #include <QSpinBox>
 #include <QLabel>
+#include <QPushButton>
+#include<qDebug>
 namespace ComputerGraphics {
 	class MyDrawBoardWidget : public QWidget {
 	public:
@@ -47,6 +49,7 @@ namespace ComputerGraphics {
 		#pragma region Button Function
 		void button_MidPointLine() {
 			m_drawArea.SetShapeType(ShapeType::MidPointLine);
+
 		}
 		void button_BresenhamLine() {
 			m_drawArea.SetShapeType(ShapeType::BresenhamLine);
@@ -63,10 +66,14 @@ namespace ComputerGraphics {
 		void button_MidCLine() {
 			m_drawArea.SetShapeType(ShapeType::MidCLine);
 		}
+		void button_SeedFill() {
+			m_drawArea.SetShapeType(ShapeType::SeedFill);
+		}
 		#pragma endregion
 		#pragma region ValueChange Function
 		void SetBoarder() {
 			m_drawArea.SetBoarder(m_leftBoard->value(), m_rightBoard->value(), m_bottomBoard->value(), m_topBoard->value());
+			qDebug() << "ChangeBoarder!";
 		}
 		#pragma endregion
 
@@ -97,10 +104,10 @@ namespace ComputerGraphics {
 			m_leftUIList.AddButton(this, QIcon(QString(":/Icon/Resource/Icon/StraightLine.png"))
 				, QString("MidC Line"), QString("Mid Line Button"), this, &MyDrawBoardWidget::button_MidCLine
 				, ShapeType::MidCLine);
+			m_leftUIList.AddButton(this, QIcon(QString(":/Icon/Resource/Icon/StraightLine.png"))
+				, QString("Seed Fill"), QString("Seed Fill Button"), this, &MyDrawBoardWidget::button_SeedFill
+				, ShapeType::SeedFill);
 
-			/*
-			TODO：目前改变框内的值无法调节边框的范围
-			*/
 
 			//输入框初始化
 			QLabel* leftLable = new QLabel("left Boarder",this);
@@ -109,7 +116,6 @@ namespace ComputerGraphics {
 			m_leftBoard->setGeometry(180, 0, 64, 24);
 			m_leftBoard->setRange(0, 9999);
 
-			connect(m_leftBoard, SIGNAL(valueChanged(int)), this, SLOT(SetBoarder(int)));
 
 			QLabel* rightLable = new QLabel("right Boarder", this);
 			rightLable->setGeometry(260, 0, 72, 32);
@@ -117,15 +123,13 @@ namespace ComputerGraphics {
 			m_rightBoard->setGeometry(340, 0, 64, 24);
 			m_rightBoard->setRange(0, 9999);
 
-			connect(m_rightBoard, SIGNAL(valueChanged(int)), this, SLOT(SetBoarder(int)));
 
 			QLabel* buttonLable = new QLabel("button Boarder", this);
 			buttonLable->setGeometry(420, 0, 72, 24);
 			m_bottomBoard = new QSpinBox(this);
 			m_bottomBoard->setGeometry(500, 0, 64, 24);
 			m_bottomBoard->setRange(0, 9999);
-
-			connect(m_bottomBoard, SIGNAL(valueChanged(int)), this, SLOT(SetBoarder(int)));
+			
 
 			QLabel* topLable = new QLabel("top Boarder", this);
 			topLable->setGeometry(580, 0, 72, 24);
@@ -133,7 +137,13 @@ namespace ComputerGraphics {
 			m_topBoard->setGeometry(660, 0, 64, 24);
 			m_topBoard->setRange(0, 9999);
 
-			connect(m_topBoard, SIGNAL(valueChanged(int)), this, SLOT(SetBoarder(int)));
+
+			//确定按钮
+			QToolButton* button = new QToolButton(this);
+			button->setText("Apply Change!");
+			button->setGeometry(300, 30, 150, 30);
+			QObject::connect(button, &QToolButton::clicked, this, &MyDrawBoardWidget::SetBoarder, Qt::ConnectionType::DirectConnection);
+
 
 			//绘画区域初始化
 			m_drawArea.setParent(this);

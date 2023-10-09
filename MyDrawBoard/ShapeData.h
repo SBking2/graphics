@@ -9,7 +9,8 @@ namespace ComputerGraphics {
 		MidPointCircle,
 		CircleArc,
 		CSCLine,
-		MidCLine
+		MidCLine,
+		SeedFill
 	};
 	class ShapeData {
 	public:

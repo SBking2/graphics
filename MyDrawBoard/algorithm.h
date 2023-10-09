@@ -3,8 +3,14 @@
 #include <utility>
 #include <vector>
 #include <math.h>
+#include<qDebug>
+#define CANVASLENGTH 1000
 using namespace std;
 namespace ComputerGraphics {
+    //初始化像素点画布
+    static int** canvas;
+
+    static int layer = 0;
     //点变量
     struct Point {
         int x;
@@ -63,7 +69,6 @@ namespace ComputerGraphics {
     };
     class Algorithm {
     public:
-
 
         static vector<Point> BresenhamLining(Point start, Point end) {
             vector<Point> result{};
@@ -465,297 +470,316 @@ namespace ComputerGraphics {
             }
             return BresenhamLining(start, end);
         }
+
+        //填充算法
+        static void seedFill(const Point & clickPosition, char targetColor, char fillColor) {
+            // 如果当前像素不是目标颜色，或者已经填充过，返回
+            if (clickPosition.x < 0 || clickPosition.y < 0 || clickPosition.x >= CANVASLENGTH || clickPosition.y >= CANVASLENGTH || canvas[clickPosition.x][clickPosition.y] == 1)
+                return;
+            layer++;
+            // 将当前像素填充为目标颜色
+            canvas[clickPosition.x][clickPosition.y] = 1;
+            qDebug() << layer << endl;
+
+            // 递归向四个方向进行种子填充
+            seedFill(Point(clickPosition.x + 1, clickPosition.y), targetColor, fillColor); // 右
+            seedFill(Point(clickPosition.x - 1, clickPosition.y), targetColor, fillColor); // 左
+            seedFill(Point(clickPosition.x, clickPosition.y + 1), targetColor, fillColor); // 上
+            seedFill(Point(clickPosition.x, clickPosition.y - 1), targetColor, fillColor); // 下
+
+        }
         
     private:
-            //绘制第一区间的完整圆弧
-           static vector<Point> CircleArc1stRange(const int& radius) {
-               vector<Point> result{};
-               int dx, dy, e;
-               dx = 0;
-               dy = radius;
-               e = 1 - radius;
-               //vector<Point> temp = CirclePoints(Point(dx, dy));
-               //result.insert(result.end(), temp.begin(), temp.end());
-               result.push_back(Point(dx, dy));
-               while (dx <= dy) {
-                   if (e < 0)
-                       e += 2 * dx + 3;
-                   else
-                   {
-                       e += 2 * (dx - dy) + 5;
-                       dy--;
-                   }
-                   dx++;
-                   result.push_back(Point(dx, dy));
-                   //vector<Point> temp = CirclePoints(Point(dx, dy));
-                   //result.insert(result.end(), temp.begin(), temp.end());
-               }
-               return result;
-           }//Get The fir range points
 
-           //Circle Arc Clockwise
-           static int FindRangeofArc(const Point& point) {
-               int x = point.x, y = point.y;
-               if (x > 0 && y >= 0) {
-                   if (x < y)
-                       return 0;
-                   else
-                       return 1;
-               }
-               else if (x >= 0 && y < 0) {
-                   if (x > -y)
-                       return 2;
-                   else
-                       return 3;
-               }
-               else if (x < 0 && y <= 0) {
-                   if (x > y)
-                       return 4;
-                   else
-                       return 5;
-               }
-               else
-               {
-                   if (-x > y)
-                       return 6;
-                   else
-                       return 7;
-               }
-           }
+        //绘制第一区间的完整圆弧
+        static vector<Point> CircleArc1stRange(const int& radius) {
+            vector<Point> result{};
+            int dx, dy, e;
+            dx = 0;
+            dy = radius;
+            e = 1 - radius;
+            //vector<Point> temp = CirclePoints(Point(dx, dy));
+            //result.insert(result.end(), temp.begin(), temp.end());
+            result.push_back(Point(dx, dy));
+            while (dx <= dy) {
+                if (e < 0)
+                    e += 2 * dx + 3;
+                else
+                {
+                    e += 2 * (dx - dy) + 5;
+                    dy--;
+                }
+                dx++;
+                result.push_back(Point(dx, dy));
+                //vector<Point> temp = CirclePoints(Point(dx, dy));
+                //result.insert(result.end(), temp.begin(), temp.end());
+            }
+            return result;
+        }//Get The fir range points
 
-           //绘制第一区间的部分圆弧
-           static vector<Point> CircleArcOn1stRange(const Point& start, const Point& end, const int & radius) {
-               vector<Point> result{};
+        //Circle Arc Clockwise
+        static int FindRangeofArc(const Point& point) {
+            int x = point.x, y = point.y;
+            if (x > 0 && y >= 0) {
+                if (x < y)
+                    return 0;
+                else
+                    return 1;
+            }
+            else if (x >= 0 && y < 0) {
+                if (x > -y)
+                    return 2;
+                else
+                    return 3;
+            }
+            else if (x < 0 && y <= 0) {
+                if (x > y)
+                    return 4;
+                else
+                    return 5;
+            }
+            else
+            {
+                if (-x > y)
+                    return 6;
+                else
+                    return 7;
+            }
+        }
 
-               Point startP = start;
-               Point endP = end;
+        //绘制第一区间的部分圆弧
+        static vector<Point> CircleArcOn1stRange(const Point& start, const Point& end, const int & radius) {
+            vector<Point> result{};
 
-               int x, y, e;
-               x = 0;
-               y = radius;
-               e = 1 - radius;
-               if (x >= startP.x) {
-                   result.push_back(Point(x, y));
-               }
-               while (x <= y) {
-                   if (e < 0)
-                       e += 2 * x + 3;
-                   else {
-                       e += 2 * (x - y) + 5; y--;
-                   }
-                   x++;
-                   if (x >= startP.x && x <= endP.x) {
-                       result.push_back(Point(x, y));
-                   }
-               }
-               return result; 
-           }
-           //绘制一个区间内的部分圆弧
-           static vector<Point> CircleArc1Range(const Point & start, const Point & end, const int & radius) {
-               vector<Point> result{};
-               int x = (int)((start.x + end.x)+0.5)/2;
-               int y = (int)((start.y + end.y) + 0.5) / 2;
-               int id = FindRangeofArc(Point(x, y));
+            Point startP = start;
+            Point endP = end;
 
-               //首先需要根据区间ID转换起点和终点的坐标
-               switch (id)//********************* border?
-               {
-               case 0:
-                   //如果在第一区间，则不需要转换坐标，直接代入两点获得
-                   result = CircleArcOn1stRange(start, end, radius);
-                   break;
-               case 1: {
-                   Point startP = Point(start.y, start.x);
-                   Point endP = Point(end.y, end.x);
-                   result = CircleArcOn1stRange(endP, startP,radius);
-               }
-                   break;
-               case 2:
-               {
-                   Point startP = Point(-start.y, start.x);
-                   Point endP = Point(-end.y, end.x);
-                   result = CircleArcOn1stRange(startP, endP,radius);
-               }
-                   break;
-               case 3:
-               {
-                   Point startP = Point(start.x, -start.y);
-                   Point endP = Point(end.x, -end.y);
-                   result = CircleArcOn1stRange(endP, startP, radius);
-               }
-                   break;
-               case 4:
-               {
-                   Point startP = Point(-start.x, -start.y);
-                   Point endP = Point(-end.x, -end.y);
-                   result = CircleArcOn1stRange(startP, endP, radius);
-               }
-                   break;
-               case 5:
-               {
-                   Point startP = Point(-start.y, -start.x);
-                   Point endP = Point(-end.y, -end.x);
-                   result = CircleArcOn1stRange(endP, startP, radius);
-               }
-                   break;
-               case 6:
-               {
-                   Point startP = Point(start.y, -start.x);
-                   Point endP = Point(end.y, -end.x);
-                   result = CircleArcOn1stRange(startP, endP, radius);
-               }
-                   break;
-               case 7:
-               {
-                   Point startP = Point(-start.x, start.y);
-                   Point endP = Point(-end.x, end.y);
-                   result = CircleArcOn1stRange(endP, startP, radius);
-               }
-                   break;
-               default:
-                   throw "Out of Range !!";
-                   break;
-               }
-               //将获得的第一区间的圆弧转换回原来区间
-               result = CircleArcCompletRange(result, id);
-               return result;            
-           }
-           //根据第一区间内的圆弧，将其转换为其他区间的圆弧
-           static vector<Point> CircleArcCompletRange(const vector<Point> & firPoints,const int & id) {
-               vector<Point> result{};
-               result = firPoints;
-               switch (id)
-               {
-               case 0:
-                   break;
-               case 1:
-                   for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(result[i].y, result[i].x);
-                   }
-                   break;
-               case 2:
-                   for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(result[i].y, -1 * result[i].x);
-                   }
-                   break;
-               case 3:
-                   for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(result[i].x, -1 * result[i].y);
-                   }
-                   break;
-               case 4:
-                   for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(-1 * result[i].x, -1 * result[i].y);
-                   }
-                   break;
-               case 5:
-                   for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(-1*result[i].y, -1 * result[i].x);
-                   }
-                   break;
-               case 6:
-                   for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(-1 * result[i].y, result[i].x);
-                   }
-                   break;
-               case 7:
-                   for (int i = 0; i < result.size(); i++) {
-                       result[i] = Point(-1*result[i].x, result[i].y);
-                   }
-                   break;
-               default:
-                   throw 1;
-                   break;
-               }
-               return result;
-           }
+            int x, y, e;
+            x = 0;
+            y = radius;
+            e = 1 - radius;
+            if (x >= startP.x) {
+                result.push_back(Point(x, y));
+            }
+            while (x <= y) {
+                if (e < 0)
+                    e += 2 * x + 3;
+                else {
+                    e += 2 * (x - y) + 5; y--;
+                }
+                x++;
+                if (x >= startP.x && x <= endP.x) {
+                    result.push_back(Point(x, y));
+                }
+            }
+            return result; 
+        }
+        //绘制一个区间内的部分圆弧
+        static vector<Point> CircleArc1Range(const Point & start, const Point & end, const int & radius) {
+            vector<Point> result{};
+            int x = (int)((start.x + end.x)+0.5)/2;
+            int y = (int)((start.y + end.y) + 0.5) / 2;
+            int id = FindRangeofArc(Point(x, y));
+
+            //首先需要根据区间ID转换起点和终点的坐标
+            switch (id)//********************* border?
+            {
+            case 0:
+                //如果在第一区间，则不需要转换坐标，直接代入两点获得
+                result = CircleArcOn1stRange(start, end, radius);
+                break;
+            case 1: {
+                Point startP = Point(start.y, start.x);
+                Point endP = Point(end.y, end.x);
+                result = CircleArcOn1stRange(endP, startP,radius);
+            }
+                break;
+            case 2:
+            {
+                Point startP = Point(-start.y, start.x);
+                Point endP = Point(-end.y, end.x);
+                result = CircleArcOn1stRange(startP, endP,radius);
+            }
+                break;
+            case 3:
+            {
+                Point startP = Point(start.x, -start.y);
+                Point endP = Point(end.x, -end.y);
+                result = CircleArcOn1stRange(endP, startP, radius);
+            }
+                break;
+            case 4:
+            {
+                Point startP = Point(-start.x, -start.y);
+                Point endP = Point(-end.x, -end.y);
+                result = CircleArcOn1stRange(startP, endP, radius);
+            }
+                break;
+            case 5:
+            {
+                Point startP = Point(-start.y, -start.x);
+                Point endP = Point(-end.y, -end.x);
+                result = CircleArcOn1stRange(endP, startP, radius);
+            }
+                break;
+            case 6:
+            {
+                Point startP = Point(start.y, -start.x);
+                Point endP = Point(end.y, -end.x);
+                result = CircleArcOn1stRange(startP, endP, radius);
+            }
+                break;
+            case 7:
+            {
+                Point startP = Point(-start.x, start.y);
+                Point endP = Point(-end.x, end.y);
+                result = CircleArcOn1stRange(endP, startP, radius);
+            }
+                break;
+            default:
+                throw "Out of Range !!";
+                break;
+            }
+            //将获得的第一区间的圆弧转换回原来区间
+            result = CircleArcCompletRange(result, id);
+            return result;            
+        }
+        //根据第一区间内的圆弧，将其转换为其他区间的圆弧
+        static vector<Point> CircleArcCompletRange(const vector<Point> & firPoints,const int & id) {
+            vector<Point> result{};
+            result = firPoints;
+            switch (id)
+            {
+            case 0:
+                break;
+            case 1:
+                for (int i = 0; i < result.size(); i++) {
+                    result[i] = Point(result[i].y, result[i].x);
+                }
+                break;
+            case 2:
+                for (int i = 0; i < result.size(); i++) {
+                    result[i] = Point(result[i].y, -1 * result[i].x);
+                }
+                break;
+            case 3:
+                for (int i = 0; i < result.size(); i++) {
+                    result[i] = Point(result[i].x, -1 * result[i].y);
+                }
+                break;
+            case 4:
+                for (int i = 0; i < result.size(); i++) {
+                    result[i] = Point(-1 * result[i].x, -1 * result[i].y);
+                }
+                break;
+            case 5:
+                for (int i = 0; i < result.size(); i++) {
+                    result[i] = Point(-1*result[i].y, -1 * result[i].x);
+                }
+                break;
+            case 6:
+                for (int i = 0; i < result.size(); i++) {
+                    result[i] = Point(-1 * result[i].y, result[i].x);
+                }
+                break;
+            case 7:
+                for (int i = 0; i < result.size(); i++) {
+                    result[i] = Point(-1*result[i].x, result[i].y);
+                }
+                break;
+            default:
+                throw 1;
+                break;
+            }
+            return result;
+        }
            
-           //获取区间下个边界点或者上个边界点
-           static Point GetNextSidePoint(const int& id, bool isNext, const int & radius) {
-               Point result(0,0);
-               int value = (int)1.41 * radius;
+        //获取区间下个边界点或者上个边界点
+        static Point GetNextSidePoint(const int& id, bool isNext, const int & radius) {
+            Point result(0,0);
+            int value = (int)1.41 * radius;
 
-               switch (id)
-               {
-               case 0:
-                   if (isNext) {
-                       result = Point(value, value);
-                   }
-                   else
-                   {
-                       result = Point(0, radius);
-                   }
-                   break;
-               case 1:
-                   if (isNext) {
-                       result = Point(radius, 0);
-                   }
-                   else
-                   {
-                       result = Point(value, value);
-                   }
-                   break;
-               case 2:
-                   if (isNext) {
-                       result = Point(value, -value);
-                   }
-                   else
-                   {
-                       result = Point(radius, 0);
-                   }
-                   break;
-               case 3:
-                   if (isNext) {
-                       result = Point(0, -radius);
-                   }
-                   else
-                   {
-                       result = Point(value, -value);
-                   }
-                   break;
-               case 4:
-                   if (isNext) {
-                       result = Point(-value, -value);
-                   }
-                   else
-                   {
-                       result = Point(0, -radius);
-                   }
-                   break;
-               case 5:
-                   if (isNext) {
-                       result = Point(-radius, 0);
-                   }
-                   else
-                   {
-                       result = Point(-value, -value);
-                   }
-                   break;
-               case 6:
-                   if (isNext) {
-                       result = Point(-value, value);
-                   }
-                   else
-                   {
-                       result = Point(-radius, 0);
-                   }
-                   break;
-               case 7:
-                   if (isNext) {
-                       result = Point(0, radius);
-                   }
-                   else
-                   {
-                       result = Point(-value, value);
-                   }
-                   break;
-               default:
-                   throw "Out of Range !!";
-                   break;
-               }
+            switch (id)
+            {
+            case 0:
+                if (isNext) {
+                    result = Point(value, value);
+                }
+                else
+                {
+                    result = Point(0, radius);
+                }
+                break;
+            case 1:
+                if (isNext) {
+                    result = Point(radius, 0);
+                }
+                else
+                {
+                    result = Point(value, value);
+                }
+                break;
+            case 2:
+                if (isNext) {
+                    result = Point(value, -value);
+                }
+                else
+                {
+                    result = Point(radius, 0);
+                }
+                break;
+            case 3:
+                if (isNext) {
+                    result = Point(0, -radius);
+                }
+                else
+                {
+                    result = Point(value, -value);
+                }
+                break;
+            case 4:
+                if (isNext) {
+                    result = Point(-value, -value);
+                }
+                else
+                {
+                    result = Point(0, -radius);
+                }
+                break;
+            case 5:
+                if (isNext) {
+                    result = Point(-radius, 0);
+                }
+                else
+                {
+                    result = Point(-value, -value);
+                }
+                break;
+            case 6:
+                if (isNext) {
+                    result = Point(-value, value);
+                }
+                else
+                {
+                    result = Point(-radius, 0);
+                }
+                break;
+            case 7:
+                if (isNext) {
+                    result = Point(0, radius);
+                }
+                else
+                {
+                    result = Point(-value, value);
+                }
+                break;
+            default:
+                throw "Out of Range !!";
+                break;
+            }
 
-               return result;
-           }
+            return result;
+        }
 
 
     };

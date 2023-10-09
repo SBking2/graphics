@@ -84,5 +84,8 @@
     <ClInclude Include="MidCLineData.h">
       <Filter>Header Files\ShapeDataSon</Filter>
     </ClInclude>
+    <ClInclude Include="SeedFillData.h">
+      <Filter>Header Files\ShapeDataSon</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -58,8 +58,15 @@ namespace ComputerGraphics {
 			painter.setPen(m_pen);
 
 			std::vector<Point> points = ShapeDataCtrlSystem::getInstance()->GetAllShapePoint();
-			for (int i = 0; i < points.size(); i++) {
-				painter.drawPoint(QPoint(points[i].x, points[i].y));
+			//for (int i = 0; i < points.size(); i++) {
+			//	//painter.drawPoint(QPoint(points[i].x, points[i].y));
+			//}
+			for (int i = 0; i < CANVASLENGTH; i++) {
+				for (int j = 0; j < CANVASLENGTH; j++) {
+					if (canvas[i][j] == 1) {
+						painter.drawPoint(QPoint(i,j));
+					}
+				}
 			}
 		}
 

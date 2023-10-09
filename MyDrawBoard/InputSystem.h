@@ -75,6 +75,13 @@ namespace ComputerGraphics {
 				m_OnPressed = start;
 			}
 			break;
+			case ShapeType::SeedFill:
+			{
+				SeedFillData* newLine = new SeedFillData(start);
+				m_currentShape = newLine;
+				ShapeDataCtrlSystem::getInstance()->AddShapeData(newLine);
+			}
+			break;
 			case ShapeType::Unknown:
 				break;
 			default:
@@ -94,11 +101,14 @@ namespace ComputerGraphics {
 		void MouseRelease(const Point& end, const ShapeType& currentShpae) {
 			if (m_isSetCenter)
 				return;
-
-			m_MLisPressed = false;
-			if (m_currentShape != nullptr) {
-				m_currentShape->Set(end);
+			if (m_MLisPressed) {
+				if (m_currentShape != nullptr) {
+					m_currentShape->Set(end);
+				}
 			}
+			m_MLisPressed = false;
+			
+			ShapeDataCtrlSystem::getInstance()->GetAllShapePoint();
 			m_currentShape = nullptr;
 			m_OnReleased = end;
 		}
