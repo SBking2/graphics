@@ -9,6 +9,7 @@ using namespace std;
 namespace ComputerGraphics {
     //初始化像素点画布
     static int** canvas;
+    static int** copyCanvas;
 
     static int layer = 0;
     //点变量

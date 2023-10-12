@@ -63,7 +63,7 @@ namespace ComputerGraphics {
 			//}
 			for (int i = 0; i < CANVASLENGTH; i++) {
 				for (int j = 0; j < CANVASLENGTH; j++) {
-					if (canvas[i][j] == 1) {
+					if (canvas[i][j] == 1 || copyCanvas[i][j] == 1) {
 						painter.drawPoint(QPoint(i,j));
 					}
 				}

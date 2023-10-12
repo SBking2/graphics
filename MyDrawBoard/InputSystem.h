@@ -108,6 +108,7 @@ namespace ComputerGraphics {
 			}
 			m_MLisPressed = false;
 			
+			ShapeDataCtrlSystem::getInstance()->CopyPoints();
 			ShapeDataCtrlSystem::getInstance()->GetAllShapePoint();
 			m_currentShape = nullptr;
 			m_OnReleased = end;

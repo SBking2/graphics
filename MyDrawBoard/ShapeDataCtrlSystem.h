@@ -72,15 +72,25 @@ namespace ComputerGraphics {
 			return m_shapeCount;
 		}
 
+		void CopyPoints(){
+			for (int i = 0; i < CANVASLENGTH; i++) {
+				for (int j = 0; j < CANVASLENGTH; j++) {
+					if (copyCanvas[i][j] == 1) {
+						canvas[i][j] = 1;
+					}
+				}
+			}
+		}
+
 		std::vector<Point> GetAllShapePoint() {
 
 			for (int i = 0; i < CANVASLENGTH; i++) {
 				for (int j = 0; j < CANVASLENGTH; j++) {
-					canvas[i][j] = 0;
+					copyCanvas[i][j] = 0;
 				}
 			}
 
-			std::vector<Point> allPoints;
+			std::vector<Point> allPoints{};
 			if (m_tailNode == nullptr) {
 				return allPoints;
 			}
@@ -95,7 +105,16 @@ namespace ComputerGraphics {
 				allPoints.insert(allPoints.end(), back.begin(), back.end());
 				p = p->next;
 			}*/
-			allPoints = DIGUIGetPoints(p);
+
+			//根据递归绘制
+			//allPoints = DIGUIGetPoints(p);
+
+			//仅绘制当前点
+			allPoints = m_tailNode->GetDrawPoints();
+			for (int i = 0; i < allPoints.size(); i++) {
+				copyCanvas[allPoints[i].x][allPoints[i].y] = 1;
+			}
+
 
 			return allPoints;
 		}
@@ -108,6 +127,14 @@ namespace ComputerGraphics {
 				canvas[i] = new int[CANVASLENGTH];
 				for (int j = 0; j < CANVASLENGTH; j++) {
 					canvas[i][j] = 0;
+				}
+			}
+
+			copyCanvas = new int* [CANVASLENGTH];
+			for (int i = 0; i < CANVASLENGTH; i++) {
+				copyCanvas[i] = new int[CANVASLENGTH];
+				for (int j = 0; j < CANVASLENGTH; j++) {
+					copyCanvas[i][j] = 0;
 				}
 			}
 		}
