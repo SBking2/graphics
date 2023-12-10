@@ -24,6 +24,9 @@
     <Filter Include="Header Files\ShapeDataSon">
       <UniqueIdentifier>{ec397e39-8a2e-4411-b57e-cebaaaa28950}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Smoke">
+      <UniqueIdentifier>{c4a5d249-d5db-4735-be90-ddeb0fa579bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="MyDrawBoard.ui">
@@ -86,6 +89,18 @@
     </ClInclude>
     <ClInclude Include="SeedFillData.h">
       <Filter>Header Files\ShapeDataSon</Filter>
+    </ClInclude>
+    <ClInclude Include="BezierData.h">
+      <Filter>Header Files\ShapeDataSon</Filter>
+    </ClInclude>
+    <ClInclude Include="PolyFillData.h">
+      <Filter>Header Files\ShapeDataSon</Filter>
+    </ClInclude>
+    <ClInclude Include="CtrlPointData.h">
+      <Filter>Header Files\ShapeDataSon</Filter>
+    </ClInclude>
+    <ClInclude Include="homework.h">
+      <Filter>Header Files\Smoke</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

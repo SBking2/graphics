@@ -105,9 +105,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithm.h" />
+    <ClInclude Include="BezierData.h" />
     <ClInclude Include="BresenhamLineData.h" />
     <ClInclude Include="CircleArcData.h" />
     <ClInclude Include="CSCLineData.h" />
+    <ClInclude Include="CtrlPointData.h" />
+    <ClInclude Include="homework.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="MidCLineData.h" />
     <ClInclude Include="MidPointCircleData.h" />
@@ -116,6 +119,7 @@
     <ClInclude Include="MyDrawArea.h" />
     <ClInclude Include="MyDrawBoardWidget.h" />
     <ClInclude Include="MyUIList.h" />
+    <ClInclude Include="PolyFillData.h" />
     <ClInclude Include="SeedFillData.h" />
     <ClInclude Include="ShapeData.h" />
     <ClInclude Include="ShapeDataCtrlSystem.h" />

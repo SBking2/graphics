@@ -3,5 +3,17 @@
         <file>Resource/Icon/StraightLine.png</file>
         <file>Resource/Icon/Circle.png</file>
         <file>Resource/Icon/line2arc.png</file>
+        <file>Resource/Icon/Poly.png</file>
+        <file>Resource/Icon/Fill.png</file>
+        <file>Resource/Icon/Bezier.png</file>
+        <file>Resource/Icon/BezierCtrl.png</file>
+        <file>Resource/Icon/rotate.png</file>
+        <file>Resource/Icon/scale.png</file>
+        <file>Resource/Icon/translation.png</file>
+        <file>Resource/Icon/Axis.png</file>
+        <file>Resource/Icon/RotationAroundPoint.png</file>
+        <file>Resource/Icon/Scale.png</file>
+        <file>Resource/Icon/SAP.png</file>
+        <file>Resource/Icon/PolyCtrl.png</file>
     </qresource>
 </RCC>

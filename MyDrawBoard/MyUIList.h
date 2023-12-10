@@ -61,6 +61,12 @@ namespace ComputerGraphics {
 			m_UIListButtons[m_UIListLength] = nullptr;
 		}
 
+	    void setPosition(int ax, int ay, int aw, int ah){
+			m_startX = ax;
+			m_startY = ay;
+			setGeometry(ax, ay, aw, ah);
+		}
+
 		void DrawButtons() {
 			for (int i = 0; i < m_UIListLength; i++) {
 				if (!m_isRight) {
